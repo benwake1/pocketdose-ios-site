@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PocketDose — Insulin Dose Calculator</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue-light: #4BA3FF;
+      --blue-dark:  #1347CC;
+      --text:       #1a1a2e;
+      --muted:      #555e7a;
+      --bg:         #f5f7ff;
+      --card:       #ffffff;
+      --border:     #e2e8f7;
+      --radius:     14px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, var(--blue-light), var(--blue-dark));
+      color: #fff;
+      text-align: center;
+      padding: 80px 24px 64px;
+    }
+
+    .hero-icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 22px;
+      margin: 0 auto 24px;
+      display: block;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      opacity: 0.88;
+      margin-top: 10px;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 32px;
+      background: #fff;
+      color: var(--blue-dark);
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 10px 22px;
+      border-radius: 50px;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .badge:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+
+    /* ── Sections ── */
+    section { max-width: 760px; margin: 0 auto; padding: 64px 24px; }
+
+    h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: var(--blue-dark);
+    }
+
+    /* ── Features ── */
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+    }
+
+    .feature-card .icon {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+
+    .feature-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* ── Disclaimer ── */
+    .disclaimer-box {
+      background: #fff8e1;
+      border: 1px solid #f5c842;
+      border-radius: var(--radius);
+      padding: 24px;
+      font-size: 0.95rem;
+      color: #5a4500;
+    }
+
+    .disclaimer-box strong { display: block; margin-bottom: 8px; font-size: 1rem; }
+
+    /* ── Support ── */
+    .support-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      font-size: 0.95rem;
+    }
+
+    .support-card p + p { margin-top: 12px; }
+
+    .support-card a {
+      color: var(--blue-dark);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .support-card a:hover { text-decoration: underline; }
+
+    /* ── Privacy ── */
+    #privacy { border-top: 1px solid var(--border); }
+
+    .privacy-block { margin-bottom: 28px; }
+    .privacy-block h3 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+    .privacy-block p, .privacy-block ul { font-size: 0.95rem; color: var(--muted); }
+    .privacy-block ul { padding-left: 20px; margin-top: 6px; }
+    .privacy-block ul li { margin-bottom: 4px; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <header class="hero">
+    <img class="hero-icon" src="icon.png" alt="PocketDose app icon" />
+    <h1>PocketDose</h1>
+    <p>Insulin Dose Calculator for iPhone</p>
+    <a class="badge" href="https://apps.apple.com/app/pocketdose/idXXXXXXXXXX">
+      Download on the App Store
+    </a>
+  </header>
+
+  <!-- Features -->
+  <section id="features">
+    <h2>What it does</h2>
+    <div class="features">
+      <div class="feature-card">
+        <div class="icon">🍽️</div>
+        <h3>Carb Calculator</h3>
+        <p>Enter portion sizes and carbs per 100g — PocketDose calculates your total carb portions (CPs) instantly. Save favourite meals as presets.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">💉</div>
+        <h3>Dose Calculation</h3>
+        <p>Combines your meal dose, blood glucose correction, and CGM trend adjustment into a single clear result with a full breakdown.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">📈</div>
+        <h3>CGM Trend Support</h3>
+        <p>Seven CGM arrow directions, each with an evidence-based dose adjustment. Ultra-fast insulins (Fiasp, Lyumjev) automatically use halved adjustments.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">⚙️</div>
+        <h3>Your Settings</h3>
+        <p>Set your own insulin-to-carb ratio, correction factor, target BG, insulin type, and concentration. All saved locally on your device.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">📋</div>
+        <h3>History</h3>
+        <p>Every calculation is saved with a chart of your recent BG and doses so you can spot patterns over time.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🔒</div>
+        <h3>Fully Offline</h3>
+        <p>No account required. No internet connection needed. Your data never leaves your device.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Disclaimer -->
+  <section id="disclaimer">
+    <h2>Important Disclaimer</h2>
+    <div class="disclaimer-box">
+      <strong>⚠️ PocketDose is a calculation aid, not a medical device.</strong>
+      PocketDose does not replace the guidance of your diabetes care team. The doses it calculates are based solely on the values you enter — always use your own judgement and consult your healthcare professional if you are unsure about any dose. Never use a calculated insulin dose if your blood glucose is below 4 mmol/L — treat the hypo first.
+    </div>
+  </section>
+
+  <!-- Support -->
+  <section id="support">
+    <h2>Support</h2>
+    <div class="support-card">
+      <p>If you have a question, found a bug, or want to suggest an improvement, please get in touch.</p>
+      <p>Email: <a href="mailto:benwake1@outlook.com">benwake1@outlook.com</a></p>
+      <p>PocketDose is developed independently. Response times may vary, but every message is read.</p>
+    </div>
+  </section>
+
+  <!-- Privacy Policy -->
+  <section id="privacy">
+    <h2>Privacy Policy</h2>
+    <p style="margin-bottom:28px; color: var(--muted); font-size:0.95rem;">Last updated: May 2026</p>
+
+    <div class="privacy-block">
+      <h3>Data we collect</h3>
+      <p>PocketDose collects no personal data. The app does not require an account, does not connect to the internet, and does not transmit any information to external servers.</p>
+    </div>
+
+    <div class="privacy-block">
+      <h3>Data stored on your device</h3>
+      <p>The following information is stored locally on your iPhone only, using Apple's standard on-device storage (UserDefaults):</p>
+      <ul>
+        <li>Your insulin settings (type, concentration, ratios, target BG)</li>
+        <li>Saved meal presets</li>
+        <li>Dose calculation history (last 100 entries)</li>
+      </ul>
+      <p>This data never leaves your device and is not accessible to the developer.</p>
+    </div>
+
+    <div class="privacy-block">
+      <h3>Third-party services</h3>
+      <p>PocketDose uses no third-party SDKs, analytics, advertising, or crash reporting services.</p>
+    </div>
+
+    <div class="privacy-block">
+      <h3>Children</h3>
+      <p>PocketDose does not knowingly collect data from anyone, including children.</p>
+    </div>
+
+    <div class="privacy-block">
+      <h3>Changes to this policy</h3>
+      <p>If this policy changes, the updated version will be posted at this URL with a revised date.</p>
+    </div>
+
+    <div class="privacy-block">
+      <h3>Contact</h3>
+      <p>Questions about privacy? Email <a href="mailto:benwake1@outlook.com" style="color:var(--blue-dark);font-weight:600;">benwake1@outlook.com</a></p>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 Ben Wake &mdash; PocketDose</p>
+  </footer>
+
+</body>
+</html>
