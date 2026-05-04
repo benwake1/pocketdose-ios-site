@@ -135,6 +135,64 @@
     }
     .support-card a:hover { text-decoration: underline; }
 
+    /* ── How it's calculated ── */
+    .formula-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .formula-block h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--blue-dark);
+    }
+
+    .formula-block p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .formula {
+      background: var(--bg);
+      border-left: 3px solid var(--blue-light);
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-family: "SF Mono", "Fira Code", "Courier New", monospace;
+      font-size: 0.88rem;
+      color: var(--text);
+      margin: 8px 0 12px;
+      line-height: 1.8;
+    }
+
+    .trend-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin-top: 8px;
+    }
+
+    .trend-table th {
+      text-align: left;
+      padding: 8px 12px;
+      background: var(--bg);
+      color: var(--muted);
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .trend-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .trend-table tr:last-child td { border-bottom: none; }
+
     /* ── Privacy ── */
     #privacy { border-top: 1px solid var(--border); }
 
@@ -208,7 +266,88 @@
     <h2>Important Disclaimer</h2>
     <div class="disclaimer-box">
       <strong>⚠️ PocketDose is a calculation aid, not a medical device.</strong>
-      PocketDose does not replace the guidance of your diabetes care team. The doses it calculates are based solely on the values you enter — always use your own judgement and consult your healthcare professional if you are unsure about any dose. Never use a calculated insulin dose if your blood glucose is below 4 mmol/L — treat the hypo first.
+      PocketDose is a simple calculator. It applies fixed arithmetic formulas to the numbers you type in — nothing more. It does not use AI, machine learning, or any external data source. No information is sent to any server. Every result is produced entirely on your device, from values you provide, using the formulas shown in the <a href="#how-calculated" style="color:#5a4500;font-weight:700;">How the Calculation Works</a> section below.
+      <br /><br />
+      <strong>Who this is for:</strong> PocketDose is intended for adults with diabetes who already self-manage their insulin dosing under the supervision of a qualified diabetes care team. Your insulin-to-carb ratio, correction factor, and target blood glucose must be set or agreed by a healthcare professional before you use this app. It is not suitable for anyone who has not discussed insulin self-management with a clinician.
+      <br /><br />
+      <strong>Regulatory status:</strong> PocketDose is not a regulated medical device. It performs arithmetic on values you enter, makes no clinical assessment, and does not connect to any medical device, CGM system, or health record. It has not been cleared or approved by any medical device regulatory authority, including the MHRA, FDA, or CE marking bodies.
+      <br /><br />
+      PocketDose does not replace the guidance of your diabetes care team. Always use your own judgement and consult your healthcare professional if you are unsure about any dose. <strong>Never use a calculated insulin dose if your blood glucose is below 4 mmol/L — treat the hypo first.</strong>
+    </div>
+  </section>
+
+  <!-- How the Calculation Works -->
+  <section id="how-calculated">
+    <h2>How the Calculation Works</h2>
+    <p style="margin-bottom:24px; color:var(--muted); font-size:0.95rem;">
+      PocketDose applies straightforward arithmetic to the values you enter. There is no AI, no server, and no hidden logic. Every formula is shown here so you can verify the result yourself.
+    </p>
+
+    <div class="formula-block">
+      <h3>Step 1 — Carb Portions (CPs)</h3>
+      <p>For each food item you enter a weight (grams) and carbohydrate content (grams per 100 g). The app calculates CPs using the standard UK convention where 1 CP = 10 g of carbohydrate:</p>
+      <div class="formula">
+        Carbs (g)  = Weight (g) × Carbs per 100 g ÷ 100<br />
+        CPs        = Carbs (g) ÷ 10<br />
+        Total CPs  = sum of CPs across all items in the meal
+      </div>
+      <p>No food database is consulted. The carb values are always the ones you type in.</p>
+    </div>
+
+    <div class="formula-block">
+      <h3>Step 2 — Meal Dose</h3>
+      <p>Your insulin-to-carb ratio (set in Settings) converts Total CPs into units of insulin:</p>
+      <div class="formula">
+        Meal Dose (units) = Total CPs × Insulin-to-Carb Ratio (units per CP)
+      </div>
+    </div>
+
+    <div class="formula-block">
+      <h3>Step 3 — Correction Dose</h3>
+      <p>If your current blood glucose differs from your target, a correction is added using your correction factor (also set in Settings):</p>
+      <div class="formula">
+        Correction Dose (units) = (Current BG − Target BG) ÷ Correction Factor
+      </div>
+      <p>A negative result (BG below target) reduces the total dose. If BG is at or below 4 mmol/L the app will not produce a dose result — you must treat the hypo first.</p>
+    </div>
+
+    <div class="formula-block">
+      <h3>Step 4 — CGM Trend Adjustment</h3>
+      <p>If you select a CGM trend arrow, the app applies a percentage adjustment to the meal dose (not a fixed number of units). A rising glucose means you may need slightly more insulin for the same meal; a falling glucose means slightly less. Ultra-fast insulins (Fiasp, Lyumjev) use half the standard percentage because their faster action profile already accounts for some of the trend:</p>
+      <div class="formula">
+        Trend Adjustment (units) = Meal Dose × Trend Percentage
+      </div>
+      <table class="trend-table">
+        <thead>
+          <tr>
+            <th>CGM Arrow</th>
+            <th>Direction</th>
+            <th>Standard insulin</th>
+            <th>Ultra-fast insulin</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>↑↑</td><td>Rising rapidly</td><td>+20% of meal dose</td><td>+10% of meal dose</td></tr>
+          <tr><td>↑</td><td>Rising</td><td>+15% of meal dose</td><td>+7.5% of meal dose</td></tr>
+          <tr><td>↗</td><td>Rising slightly</td><td>+10% of meal dose</td><td>+5% of meal dose</td></tr>
+          <tr><td>→</td><td>Steady</td><td>no adjustment</td><td>no adjustment</td></tr>
+          <tr><td>↘</td><td>Falling slightly</td><td>−10% of meal dose</td><td>−5% of meal dose</td></tr>
+          <tr><td>↓</td><td>Falling</td><td>−15% of meal dose</td><td>−7.5% of meal dose</td></tr>
+          <tr><td>↓↓</td><td>Falling rapidly</td><td>−20% of meal dose</td><td>−10% of meal dose</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px;">If no trend arrow is selected, this adjustment is zero.</p>
+    </div>
+
+    <div class="formula-block">
+      <h3>Total Dose</h3>
+      <p>The three components are summed, clamped so the result cannot be negative, then rounded to the nearest whole unit:</p>
+      <div class="formula">
+        Raw Total  = Meal Dose + Correction Dose + Trend Adjustment<br />
+        Clamped    = max(0, Raw Total)<br />
+        Final Dose = round(Clamped) — nearest whole unit
+      </div>
+      <p>The app shows the final dose alongside a full breakdown of each component so you can verify every part of the calculation before acting on it.</p>
     </div>
   </section>
 
@@ -217,35 +356,87 @@
     <h2>Support</h2>
     <div class="support-card">
       <p>If you have a question, found a bug, or want to suggest an improvement, please get in touch.</p>
-      <p>Email: <a href="mailto:benwake1@outlook.com">benwake1@outlook.com</a></p>
+      <p>Email: <a href="mailto:apps@benwake.co.uk">apps@benwake.co.uk</a></p>
       <p>PocketDose is developed independently. Response times may vary, but every message is read.</p>
+    </div>
+  </section>
+
+  <!-- Terms of Use -->
+  <section id="terms">
+    <h2>Terms of Use</h2>
+    <p style="margin-bottom:28px; color: var(--muted); font-size:0.95rem;">Last updated: May 2026</p>
+
+    <div class="privacy-block">
+      <h3>Intended use</h3>
+      <p>PocketDose is a manual calculation aid for adults with diabetes who self-manage insulin dosing under clinical supervision. It is not intended for use by anyone whose insulin-to-carb ratio, correction factor, or target blood glucose has not been set or agreed by a qualified healthcare professional. It is not a substitute for clinical judgement, medical advice, or treatment.</p>
+    </div>
+
+    <div class="privacy-block">
+      <h3>Your responsibility</h3>
+      <p>By using PocketDose you accept that you are solely responsible for:</p>
+      <ul>
+        <li>Entering accurate carbohydrate estimates, blood glucose readings, and personal settings</li>
+        <li>Ensuring your insulin-to-carb ratio, correction factor, and target BG are clinically appropriate for you</li>
+        <li>Reviewing every calculated dose before acting on it</li>
+        <li>Seeking advice from your diabetes care team if you are uncertain about any dose or setting</li>
+      </ul>
+    </div>
+
+    <div class="privacy-block">
+      <h3>No warranty</h3>
+      <p>PocketDose is provided "as is" without warranty of any kind, express or implied. The developer does not warrant that the app is free from errors or that calculations will always be accurate.</p>
+    </div>
+
+    <div class="privacy-block">
+      <h3>Limitation of liability</h3>
+      <p>To the fullest extent permitted by applicable law, the developer accepts no liability for any injury, harm, or loss — including hypoglycaemia or hyperglycaemia — arising from use of, or reliance on, PocketDose or any dose it calculates.</p>
+    </div>
+
+    <div class="privacy-block">
+      <h3>Not a medical device</h3>
+      <p>PocketDose is not a medical device and is not regulated as one under UK MDR 2002, EU MDR 2017/745, US FDA medical device regulations, or any equivalent framework. It applies arithmetic to user-entered values only and makes no autonomous clinical recommendation.</p>
+    </div>
+
+    <div class="privacy-block">
+      <h3>Governing law</h3>
+      <p>These terms are governed by the laws of England and Wales.</p>
+    </div>
+
+    <div class="privacy-block">
+      <h3>Changes</h3>
+      <p>If these terms change, the updated version will be posted here with a revised date.</p>
     </div>
   </section>
 
   <!-- Privacy Policy -->
   <section id="privacy">
     <h2>Privacy Policy</h2>
-    <p style="margin-bottom:28px; color: var(--muted); font-size:0.95rem;">Last updated: May 2026</p>
+    <p style="margin-bottom:28px; color: var(--muted); font-size:0.95rem;">Last updated: May 2026 &mdash; This policy is written in accordance with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.</p>
 
     <div class="privacy-block">
       <h3>Data we collect</h3>
-      <p>PocketDose collects no personal data. The app does not require an account, does not connect to the internet, and does not transmit any information to external servers.</p>
+      <p>None. PocketDose collects no personal data whatsoever. The app does not require an account, does not have a network connection, and does not transmit any information — including calculation inputs or results — to any external server. Every calculation happens entirely on your device using only the values you enter.</p>
     </div>
 
     <div class="privacy-block">
       <h3>Data stored on your device</h3>
-      <p>The following information is stored locally on your iPhone only, using Apple's standard on-device storage (UserDefaults):</p>
+      <p>The following information is stored locally on your iPhone only, using Apple's standard on-device storage (UserDefaults). It is never synced to the cloud, shared with the developer, or sent anywhere:</p>
       <ul>
         <li>Your insulin settings (type, concentration, ratios, target BG)</li>
         <li>Saved meal presets</li>
         <li>Dose calculation history (last 100 entries)</li>
       </ul>
-      <p>This data never leaves your device and is not accessible to the developer.</p>
+      <p>Deleting the app permanently removes all of this data.</p>
     </div>
 
     <div class="privacy-block">
       <h3>Third-party services</h3>
-      <p>PocketDose uses no third-party SDKs, analytics, advertising, or crash reporting services.</p>
+      <p>PocketDose uses no third-party SDKs, analytics, advertising, or crash reporting services. There are no hidden frameworks that could transmit data.</p>
+    </div>
+
+    <div class="privacy-block">
+      <h3>Cookies and tracking</h3>
+      <p>This website uses no cookies, tracking scripts, or analytics of any kind. No information about your visit is collected or stored.</p>
     </div>
 
     <div class="privacy-block">
@@ -260,7 +451,7 @@
 
     <div class="privacy-block">
       <h3>Contact</h3>
-      <p>Questions about privacy? Email <a href="mailto:benwake1@outlook.com" style="color:var(--blue-dark);font-weight:600;">benwake1@outlook.com</a></p>
+      <p>Questions about privacy? Email <a href="mailto:apps@benwake.co.uk" style="color:var(--blue-dark);font-weight:600;">apps@benwake.co.uk</a></p>
     </div>
   </section>
 
